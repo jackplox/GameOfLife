@@ -9,17 +9,12 @@ delay = 0.1 #ms Delay time for each frame
 
 class Colors:
     RED = '\033[91m'
-    GREEN = '\033[92m'
-    YELLOW = '\033[93m'
-    BLUE = '\033[94m'
-    MAGENTA = '\033[95m'
     CYAN = '\033[96m'
     RESET = '\033[0m'
 
 def RunGame():
 	
 	iteration = 0
-	#print("START")
 
 	gameField = {}
 
@@ -32,19 +27,13 @@ def RunGame():
 		for i in range(yDimension):
 			for j in range(xDimension):
 				if iteration == 0:
-					#print("I = " + str(i) + "\nJ = " + str(j))
 					currentString = initialPrint(j, i, currentString, gameField, chanceOfSpawning)
 					continue
 				nextField[(j, i)] = evaluateCell(j, i, gameField)
-				#print("GAMEFIELD["+ str(j) + ", " + str(i) + "] = " + str(gameField.get((j,i))))
 				currentString += nextField[(j, i)]
 			currentString += "\n"
 
 		if iteration > 0:
-			# if gameField == nextField:
-			# 	print(f"Matching cells: {sum(gameField[k] == nextField[k] for k in nextField)}/{len(nextField)}")
-			# 	print(f" -- The game of life has ended.\nYour game lasted {Colors.RED}" + str(iteration) + f"{Colors.RESET} iterations.")
-			# 	return 0
 			gameField=nextField
 		
 		iteration += 1
@@ -62,7 +51,6 @@ def initialPrint(xDimension, yDimension, currentString, gameField, chanceOfSpawn
 	gameField[(xDimension, yDimension)] = aliveCell if random.randrange(0, 100) <= chanceOfSpawning else deadCell
 	currentString += gameField[(xDimension, yDimension)]
 
-	#print("CURRENTSTRING: \n" + currentString)
 	return currentString
 
 def evaluateCell(xDimension, yDimension, gameField): 
@@ -84,8 +72,6 @@ def evaluateCell(xDimension, yDimension, gameField):
 			except:
 				# Out of bounds position
 				continue
-
-	#print("EVALUATING CELL: ( " + str(xDimension) + ", " + str(yDimension) + " ) = " + str(gameField.get((xDimension,yDimension))) + "\nNEIGHBORS: " + str(neighbors))
 
 	isAlive = gameField[(xDimension, yDimension)] == aliveCell
 	if isAlive:
