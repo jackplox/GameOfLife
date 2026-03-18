@@ -4,7 +4,7 @@ import time
 
 xDimension = 50
 yDimension = 50
-chanceOfSpawning = 10
+chanceOfSpawning = 25
 delay = 0.1 #ms Delay time for each frame
 
 class Colors:
@@ -27,9 +27,9 @@ def RunGame():
 		for i in range(yDimension):
 			for j in range(xDimension):
 				if iteration == 0:
-					currentString = initialPrint(j, i, currentString, gameField, chanceOfSpawning)
+					currentString = InitialPrint(j, i, currentString, gameField, chanceOfSpawning)
 					continue
-				nextField[(j, i)] = evaluateCell(j, i, gameField)
+				nextField[(j, i)] = EvaluateCell(j, i, gameField)
 				currentString += nextField[(j, i)]
 			currentString += "\n"
 
@@ -44,7 +44,7 @@ def RunGame():
 
 		time.sleep(delay)
 
-def initialPrint(xDimension, yDimension, currentString, gameField, chanceOfSpawning):
+def InitialPrint(xDimension, yDimension, currentString, gameField, chanceOfSpawning):
 	aliveCell = f" {Colors.CYAN}0{Colors.RESET} "
 	deadCell = f" {Colors.RED}-{Colors.RESET} "
 	
@@ -53,11 +53,10 @@ def initialPrint(xDimension, yDimension, currentString, gameField, chanceOfSpawn
 
 	return currentString
 
-def evaluateCell(xDimension, yDimension, gameField): 
+def EvaluateCell(xDimension, yDimension, gameField): 
  
 	aliveCell = f" {Colors.CYAN}0{Colors.RESET} "
 	deadCell = f" {Colors.RED}-{Colors.RESET} "
-	gameIsOn = True
 	neighbors = 0
 
 	for i in range(3):
