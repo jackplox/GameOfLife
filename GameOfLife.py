@@ -7,10 +7,10 @@ yDimension = 50
 chanceOfSpawning = 25
 delay = 0.1 #ms Delay time for each frame
 
-class Colors:
-    RED = '\033[91m'
-    CYAN = '\033[96m'
-    RESET = '\033[0m'
+class Cell:
+    dead = ' \033[91m' + '-' + '\033[0m '  # \033[91m = Red 
+    alive = ' \033[96m' + '0' + '\033[0m ' # \033[96m = Cyan
+                                           # \033[0m = Reset color
 
 def RunGame():
 	
@@ -21,7 +21,7 @@ def RunGame():
 	gameIsOn = True
 
 	while(gameIsOn):
-		clear_screen()
+		ClearScreen()
 		currentString = ""
 		nextField = {}
 		for i in range(yDimension):
@@ -45,18 +45,14 @@ def RunGame():
 		time.sleep(delay)
 
 def InitialPrint(xDimension, yDimension, currentString, gameField, chanceOfSpawning):
-	aliveCell = f" {Colors.CYAN}0{Colors.RESET} "
-	deadCell = f" {Colors.RED}-{Colors.RESET} "
 	
-	gameField[(xDimension, yDimension)] = aliveCell if random.randrange(0, 100) <= chanceOfSpawning else deadCell
+	gameField[(xDimension, yDimension)] = Cell.alive if random.randrange(0, 100) <= chanceOfSpawning else Cell.dead
 	currentString += gameField[(xDimension, yDimension)]
 
 	return currentString
 
 def EvaluateCell(xDimension, yDimension, gameField): 
  
-	aliveCell = f" {Colors.CYAN}0{Colors.RESET} "
-	deadCell = f" {Colors.RED}-{Colors.RESET} "
 	neighbors = 0
 
 	for i in range(3):
@@ -66,26 +62,27 @@ def EvaluateCell(xDimension, yDimension, gameField):
 			if xOffset == 0 and yOffset == 0:
 				continue
 			try:
-				if gameField[(xDimension + xOffset, yDimension + yOffset)] == aliveCell:
+				if gameField[(xDimension + xOffset, yDimension + yOffset)] == Cell.alive:
 					neighbors += 1	
 			except:
 				# Out of bounds position
 				continue
 
-	isAlive = gameField[(xDimension, yDimension)] == aliveCell
+	isAlive = gameField[(xDimension, yDimension)] == Cell.alive
 	if isAlive:
+		# Check the rules of Conway's Game of Life
 	    if neighbors < 2 or neighbors > 3:
-	        return deadCell
+	        return Cell.dead
 	    else:
-	        return aliveCell
+	        return Cell.alive
 	else:
 	    if neighbors == 3:
-	        return aliveCell
+	        return Cell.alive
 	    else:
-	        return deadCell
+	        return Cell.dead
 			
 
-def clear_screen():
+def ClearScreen():
     # Check the operating system name
     if os.name == 'nt':
         # Command for Windows
